@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SPACE FURY</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="startScreen">
+        <h1>COMSIC DEFENDER</h1>
+        <p id="startInstructions">Press ENTER to Start</p>
+        <p id="controlInstructions">Arrow Keys: Move | Space: Shoot</p>
+        <div id="difficultySelection">
+            <button class="difficulty-btn" data-difficulty="easy">Easy</button>
+            <button class="difficulty-btn" data-difficulty="normal">Normal</button>
+            <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+            <button class="difficulty-btn" data-difficulty="insane">Insane</button>
+        </div>
+        <p id="difficultyDisplay">Mode: Normal</p>
+        <p id="welcomeMessage">Ready for action!</p>
+    </div>
+    <div id="gameOverScreen" style="display: none;">
+        <h1>GAME OVER</h1>
+        <p>Final Score: <span id="finalScore">0</span></p>
+        <p>Waves Cleared: <span id="finalWaves">0</span></p>
+        <p id="restartInstructions">Press ENTER to Play Again</p>
+    </div>
+    <div id="gameWinScreen" style="display: none;">
+        <h1>YOU WIN!</h1>
+        <p>Final Score: <span id="winFinalScore">0</span></p>
+        <p>Waves Cleared: <span id="winFinalWaves">0</span></p>
+        <p id="winRestartInstructions">Press ENTER to Play Again</p>
+    </div>
+    <div id="pauseScreen" style="display: none;">
+        <h1>PAUSED</h1>
+        <p>Press 'P' or the Pause button to resume</p>
+    </div>
+
+    <div id="ui">
+        <span>Score: <span id="score">0</span></span>
+
+        <span>Level: <span id="level">1</span></span>
+        
+        <span>Wave: <span id="wave">1</span></span>
+    </div>
+    <div id="lives"></div>
+    <div id="powerup-status">
+        <span id="rapidFire">Rapid Fire</span>
+        <span id="tripleShot">Triple Shot</span>
+        <span id="shield">Shield</span>
+    </div>
+    <div id="bossHealth" style="display: none;">
+        <div id="bossHealthBar"></div>
+    </div>
+
+    <div id="gameControls" style="display: none;">
+        <button id="pauseBtn">❚❚</button>
+        <button id="homeBtn">🏠</button>
+    </div>
+
+    <canvas id="gameCanvas" tabindex="1" width="800" height="600"></canvas>
+    <div id="mobileControls">
+        <div class="control-btn" id="leftBtn">←</div>
+        <div class="control-btn" id="shootBtn">🔥</div>
+        <div class="control-btn" id="rightBtn">→</div>
+    </div>
+    <audio id="gameMusic" src="music.mp3" loop></audio>
+
+    <script src="game.js"></script>
+</body>
+</html>
