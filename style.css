@@ -8,26 +8,30 @@ body {
     height: 100vh;
     font-family: 'Inter', sans-serif;
     touch-action: none;
+    user-select: none;
 }
 
 #gameCanvas {
     border: 2px solid #fff;
     display: block;
     border-radius: 8px;
-    outline: none;
+    background-color: #000;
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    max-width: 100%;
+    max-height: 100%;
 }
 
 #startScreen, #gameOverScreen, #gameWinScreen {
     position: absolute;
     color: white;
     text-align: center;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
-    animation: fadeIn 1s ease-in-out;
+    animation: fadeIn 0.5s ease-in-out;
     z-index: 10;
+    min-width: 300px;
 }
 
 @keyframes fadeIn {
@@ -50,7 +54,7 @@ h1 {
 }
 
 p {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 10px;
     color: #ADD8E6;
 }
@@ -60,11 +64,13 @@ p {
     top: 10px;
     left: 10px;
     color: white;
-    font-size: 20px;
+    font-size: 18px;
     background: rgba(0, 0, 0, 0.6);
     padding: 10px 15px;
     border-radius: 8px;
     border: 1px solid #00FFFF;
+    display: flex;
+    gap: 15px;
     z-index: 5;
 }
 
@@ -72,13 +78,14 @@ p {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 28px;
+    font-size: 24px;
     color: red;
     background: rgba(0, 0, 0, 0.6);
     padding: 10px 15px;
     border-radius: 8px;
     border: 1px solid #FF0000;
     z-index: 5;
+    font-weight: bold;
 }
 
 #bossHealth {
@@ -86,9 +93,9 @@ p {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 70%;
-    max-width: 600px;
-    height: 25px;
+    width: 60%;
+    max-width: 500px;
+    height: 20px;
     background: #333;
     border: 2px solid #fff;
     border-radius: 12px;
@@ -103,132 +110,121 @@ p {
     width: 100%;
     background: linear-gradient(to right, #FF0000, #FFA500);
     transition: width 0.3s ease-out;
-    border-radius: 10px;
 }
 
-.powerup-active {
-    color: #0f0;
-    font-weight: bold;
-    text-shadow: 0 0 8px #0f0;
-}
-
-#mobileControls {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    display: none;
-    justify-content: space-between;
-    padding: 0 20px;
-    box-sizing: border-box;
-    z-index: 5;
-}
-
-.control-btn {
-    width: 70px;
-    height: 70px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    color: white;
-    user-select: none;
-}
-
-/* Difficulty Selection Buttons */
 #difficultySelection {
     display: flex;
     justify-content: center;
-    gap: 15px;
-    margin-top: 30px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
 }
 
 .difficulty-btn {
     background: transparent;
     border: 2px solid #00FFFF;
     color: #00FFFF;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 8px;
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
+    font-family: inherit;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     text-transform: uppercase;
 }
 
-.difficulty-btn:hover {
+.difficulty-btn:hover, .difficulty-btn.selected {
     background: #00FFFF;
     color: #000;
     box-shadow: 0 0 15px #00FFFF;
 }
 
-.difficulty-btn.selected {
-    background: #00FFFF;
-    color: #000;
-    box-shadow: 0 0 20px #00FFFF;
-}
-
-/* Power-up Status Display (Top Center) */
+/* Power-up Status */
 #powerup-status {
     position: absolute;
-    top: 15px;
+    top: 60px; /* Moved down slightly to not overlap UI */
     left: 50%;
     transform: translateX(-50%);
     z-index: 100;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 8px 15px;
-    border-radius: 10px;
-    border: 2px solid #555;
-    display: none; /* Hidden by default, shown by JS */
-    gap: 20px;
-    align-items: center;
+    display: flex;
+    gap: 15px;
+    pointer-events: none;
 }
 
 #powerup-status span {
-    color: #666; /* Default inactive color */
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    color: #555;
     font-weight: bold;
     font-size: 14px;
-    transition: color 0.3s, text-shadow 0.3s;
+    transition: all 0.3s;
 }
 
-/* Active state for power-ups (controlled by JS) */
-#powerup-status span.active#rapidFire {
-    color: #FFD700;
-    text-shadow: 0 0 8px #FFD700;
-}
-
-#powerup-status span.active#tripleShot {
-    color: #00FF00;
-    text-shadow: 0 0 8px #00FF00;
-}
-
-#powerup-status span.active#shield {
-    color: #00FFFF;
-    text-shadow: 0 0 8px #00FFFF;
-}
-
+#powerup-status span.active-rapid { color: #FFD700; border-color: #FFD700; box-shadow: 0 0 5px #FFD700; }
+#powerup-status span.active-triple { color: #00FF00; border-color: #00FF00; box-shadow: 0 0 5px #00FF00; }
+#powerup-status span.active-shield { color: #00FFFF; border-color: #00FFFF; box-shadow: 0 0 5px #00FFFF; }
 
 #pauseScreen {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: rgba(0,0,0,0.85);
-    display: flex;
+    display: none; /* Controlled by JS */
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     color: #00FFFF;
-    text-align: center;
-    border-radius: 0;
-    box-shadow: none;
-    font-size: 2rem;
-    animation: fadeIn 0.5s;
 }
 
+#gameControls {
+    position: absolute;
+    top: 10px;
+    right: 150px; /* Positioned to left of lives */
+    z-index: 20;
+    display: none; /* Shown when game starts */
+    gap: 10px;
+}
 
+#gameControls button {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid #fff;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#gameControls button:hover {
+    background: #333;
+}
+
+#mobileControls {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: none; /* Flex when mobile detected */
+    justify-content: space-between;
+    padding: 0 30px;
+    box-sizing: border-box;
+    z-index: 20;
+}
+
+.control-btn {
+    width: 60px; height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+.control-btn:active { background: rgba(255, 255, 255, 0.4); }
