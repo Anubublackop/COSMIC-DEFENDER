@@ -8,19 +8,17 @@ body {
     height: 100vh;
     font-family: 'Inter', sans-serif;
     touch-action: none;
-    user-select: none;
 }
 
 #gameCanvas {
-    border: 2px solid #fff;
+    border: 2px solid #00FFFF;
     display: block;
     border-radius: 8px;
-    background-color: #000;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-    max-width: 100%;
-    max-height: 100%;
+    outline: none;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
 }
 
+/* Start / Game Over / Win Screens */
 #startScreen, #gameOverScreen, #gameWinScreen {
     position: absolute;
     color: white;
@@ -28,10 +26,9 @@ body {
     background: rgba(0, 0, 0, 0.85);
     padding: 40px;
     border-radius: 15px;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
-    animation: fadeIn 0.5s ease-in-out;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+    animation: fadeIn 1s ease-in-out;
     z-index: 10;
-    min-width: 300px;
 }
 
 @keyframes fadeIn {
@@ -54,54 +51,132 @@ h1 {
 }
 
 p {
-    font-size: 20px;
+    font-size: 24px;
     margin-bottom: 10px;
     color: #ADD8E6;
 }
 
+/* UI – Top Left */
 #ui {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    gap: 30px;
     color: white;
-    font-size: 18px;
+    font-size: 22px;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid #00FFFF;
+    z-index: 5;
+    letter-spacing: 1px;
+}
+
+#ui span {
+    text-shadow: 0 0 5px rgba(0,255,255,0.5);
+}
+
+/* Top Right – Lives + Controls */
+#topRight {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
     background: rgba(0, 0, 0, 0.6);
     padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #00FFFF;
-    display: flex;
-    gap: 15px;
+    border-radius: 10px;
+    border: 1px solid #FF0000;
     z-index: 5;
 }
 
 #lives {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
+    font-size: 28px;
     color: red;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #FF0000;
-    z-index: 5;
-    font-weight: bold;
+    text-shadow: 0 0 10px red;
+    margin-right: 5px;
 }
 
-#bossHealth {
+#gameControls {
+    display: flex;
+    gap: 8px;
+}
+
+#gameControls button {
+    background: rgba(255,255,255,0.15);
+    border: 2px solid #00FFFF;
+    color: #00FFFF;
+    font-size: 22px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#gameControls button:hover {
+    background: #00FFFF;
+    color: #000;
+    box-shadow: 0 0 15px #00FFFF;
+}
+
+/* Power-up Status */
+#powerup-status {
     position: absolute;
-    bottom: 20px;
+    top: 75px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60%;
-    max-width: 500px;
-    height: 20px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: 2px solid #555;
+    display: none;
+    gap: 25px;
+    align-items: center;
+}
+
+#powerup-status span {
+    color: #666;
+    font-weight: bold;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+#powerup-status span.active#rapidFire {
+    color: #FFD700;
+    text-shadow: 0 0 10px #FFD700;
+}
+#powerup-status span.active#tripleShot {
+    color: #00FF00;
+    text-shadow: 0 0 10px #00FF00;
+}
+#powerup-status span.active#shield {
+    color: #00FFFF;
+    text-shadow: 0 0 10px #00FFFF;
+}
+
+/* Boss Health */
+#bossHealth {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    max-width: 600px;
+    height: 25px;
     background: #333;
     border: 2px solid #fff;
     border-radius: 12px;
     overflow: hidden;
     display: none;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
     z-index: 5;
 }
 
@@ -112,119 +187,84 @@ p {
     transition: width 0.3s ease-out;
 }
 
+/* Difficulty Buttons */
 #difficultySelection {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
-    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 .difficulty-btn {
     background: transparent;
     border: 2px solid #00FFFF;
     color: #00FFFF;
-    padding: 8px 16px;
+    padding: 10px 20px;
     border-radius: 8px;
-    font-family: inherit;
-    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     text-transform: uppercase;
 }
 
-.difficulty-btn:hover, .difficulty-btn.selected {
+.difficulty-btn:hover {
     background: #00FFFF;
     color: #000;
     box-shadow: 0 0 15px #00FFFF;
 }
 
-/* Power-up Status */
-#powerup-status {
+.difficulty-btn.selected {
+    background: #00FFFF;
+    color: #000;
+    box-shadow: 0 0 20px #00FFFF;
+}
+
+/* Mobile Controls */
+#mobileControls {
     position: absolute;
-    top: 60px; /* Moved down slightly to not overlap UI */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
+    bottom: 20px;
+    width: 100%;
+    display: none;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 5;
+}
+
+.control-btn {
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
     display: flex;
-    gap: 15px;
-    pointer-events: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    color: white;
+    user-select: none;
+    border: 2px solid #00FFFF;
 }
 
-#powerup-status span {
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 5px 10px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    color: #555;
-    font-weight: bold;
-    font-size: 14px;
-    transition: all 0.3s;
-}
-
-#powerup-status span.active-rapid { color: #FFD700; border-color: #FFD700; box-shadow: 0 0 5px #FFD700; }
-#powerup-status span.active-triple { color: #00FF00; border-color: #00FF00; box-shadow: 0 0 5px #00FF00; }
-#powerup-status span.active-shield { color: #00FFFF; border-color: #00FFFF; box-shadow: 0 0 5px #00FFFF; }
-
+/* Pause Screen */
 #pauseScreen {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background: rgba(0,0,0,0.85);
-    display: none; /* Controlled by JS */
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     color: #00FFFF;
+    text-align: center;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 2rem;
+    animation: fadeIn 0.5s;
 }
-
-#gameControls {
-    position: absolute;
-    top: 10px;
-    right: 150px; /* Positioned to left of lives */
-    z-index: 20;
-    display: none; /* Shown when game starts */
-    gap: 10px;
-}
-
-#gameControls button {
-    background: rgba(0,0,0,0.6);
-    border: 1px solid #fff;
-    color: white;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-#gameControls button:hover {
-    background: #333;
-}
-
-#mobileControls {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    display: none; /* Flex when mobile detected */
-    justify-content: space-between;
-    padding: 0 30px;
-    box-sizing: border-box;
-    z-index: 20;
-}
-
-.control-btn {
-    width: 60px; height: 60px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid rgba(255,255,255,0.5);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    color: white;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-}
-.control-btn:active { background: rgba(255, 255, 255, 0.4); }
